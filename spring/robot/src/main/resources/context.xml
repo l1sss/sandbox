@@ -1,0 +1,27 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="robot"
+          class="ru.javabegin.training.spring.impls.robot.RobotImpl">
+        <constructor-arg ref="sonyHead"/>
+        <constructor-arg ref="sonyHand"/>
+        <constructor-arg ref="sonyLeg"/>
+    </bean>
+
+    <bean id="sonyHead"
+          class="ru.javabegin.training.spring.impls.sony.SonyHead"/>
+    <bean id="sonyHand"
+          class="ru.javabegin.training.spring.impls.sony.SonyHand"/>
+    <bean id="sonyLeg"
+          class="ru.javabegin.training.spring.impls.sony.SonyLeg"/>
+
+    <bean id="toshibaHead"
+          class="ru.javabegin.training.spring.impls.toshiba.ToshibaHead"/>
+    <bean id="toshibaHand"
+          class="ru.javabegin.training.spring.impls.toshiba.ToshibaHand"/>
+    <bean id="toshibaLeg"
+          class="ru.javabegin.training.spring.impls.toshiba.ToshibaLeg"/>
+
+</beans>
