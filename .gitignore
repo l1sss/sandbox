@@ -1,7 +1,10 @@
+# IDE
 **/.idea
 **.iml
 **/target
-/testproject
+**/.classpath
+**/.project
+**/.settings
 
 # Mac
 .DS_Store
@@ -10,7 +13,10 @@
 **/log/
 **/target/
 
-#Gradle
+# Gradle
 **/build/
 **/gradle/
 **/.gradle/
+
+# dir
+/testproject
