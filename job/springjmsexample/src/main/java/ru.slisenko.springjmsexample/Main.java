@@ -8,7 +8,7 @@ import ru.slisenko.springjmsexample.jms.JmsTextMessageSender;
 public class Main {
 
     public static void main(String[] args) {
-        //System.out.println(Thread.currentThread().getName());
+//        System.out.println(Thread.currentThread().getName());
         ApplicationContext ctx = new ClassPathXmlApplicationContext("spring/spring-context.xml");
         JmsTextMessageSender jmsTextMessageSender = (JmsTextMessageSender)ctx.getBean("jmsTextMessageSender");
         try {
@@ -16,6 +16,6 @@ public class Main {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //((ClassPathXmlApplicationContext)ctx).close();
+        ((ClassPathXmlApplicationContext)ctx).close();
     }
 }

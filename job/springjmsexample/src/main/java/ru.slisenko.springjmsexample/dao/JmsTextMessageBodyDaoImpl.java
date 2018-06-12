@@ -1,5 +1,7 @@
 package ru.slisenko.springjmsexample.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -12,6 +14,7 @@ import java.sql.PreparedStatement;
 
 @Component
 public class JmsTextMessageBodyDaoImpl implements JmsTextMessageBodyDao {
+    private final static Logger LOGGER = LoggerFactory.getLogger(JmsTextMessageBodyDaoImpl.class);
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -26,6 +29,8 @@ public class JmsTextMessageBodyDaoImpl implements JmsTextMessageBodyDao {
         };
         KeyHolder holder = new GeneratedKeyHolder();
         jdbcTemplate.update(creator, holder);
+        LOGGER.info("MessageBody is saved in DB | innerMessageId: {} | text: {}",
+                body.getJmsMessageId(), body.getText());
         return holder.getKey().longValue();
     }
 }

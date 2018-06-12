@@ -20,10 +20,15 @@
     </bean>-->
 
     <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-        <constructor-arg index="0" value="tcp://localhost:61616"/>
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+        <property name="redeliveryPolicy">
+            <bean class="org.apache.activemq.RedeliveryPolicy">
+                <property name="maximumRedeliveries" value="4"/>
+            </bean>
+        </property>
     </bean>
 
-    <bean id="connectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+    <bean id="cachingConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
         <constructor-arg ref="amqConnectionFactory"/>
     </bean>
 
@@ -32,14 +37,15 @@
     </bean>
 
     <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
-        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="connectionFactory" ref="cachingConnectionFactory"/>
         <property name="defaultDestination" ref="defaultDestination"/>
     </bean>
 
     <bean id = "messageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
-        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="connectionFactory" ref="amqConnectionFactory"/>
         <property name="destinationName" value="springTestQueue"/>
-        <property name="messageListener" ref="jmsMessageListener"/>
+        <property name="messageListener" ref="jmsTextMessageListener"/>
+        <property name="sessionTransacted" value="true"/>
     </bean>
 
     <bean id="dataSource"
