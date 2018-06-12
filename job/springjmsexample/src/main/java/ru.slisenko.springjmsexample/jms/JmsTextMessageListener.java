@@ -5,9 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.listener.SessionAwareMessageListener;
 import org.springframework.stereotype.Service;
-import ru.slisenko.springjmsexample.dao.JmsTextMessageBodyDao;
 import ru.slisenko.springjmsexample.dao.JmsTextMessageDao;
-import ru.slisenko.springjmsexample.model.JmsTextMessageBody;
 
 import javax.jms.JMSException;
 import javax.jms.Session;
@@ -20,9 +18,6 @@ public class JmsTextMessageListener implements SessionAwareMessageListener<TextM
     @Autowired
     private JmsTextMessageDao jmsTextMessageDao;
 
-    @Autowired
-    private JmsTextMessageBodyDao jmsTextMessageBodyDao;
-
     @Override
     public void onMessage(TextMessage message, Session session) throws JMSException {
 //        System.out.println(Thread.currentThread().getName());
@@ -31,9 +26,8 @@ public class JmsTextMessageListener implements SessionAwareMessageListener<TextM
         persist(message);
     }
 
+
     private void persist(TextMessage message) throws JMSException {
-        Long tableMessageId = jmsTextMessageDao.insert(message);
-        JmsTextMessageBody body = new JmsTextMessageBody(tableMessageId, message.getText());
-        jmsTextMessageBodyDao.insert(body);
+        jmsTextMessageDao.insert(message);
     }
 }

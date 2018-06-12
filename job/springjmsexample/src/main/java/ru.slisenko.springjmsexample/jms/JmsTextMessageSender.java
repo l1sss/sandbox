@@ -12,7 +12,7 @@ import java.util.UUID;
 @Service
 public class JmsTextMessageSender {
     private final static Logger LOGGER = LoggerFactory.getLogger(JmsTextMessageSender.class);
-    private final static int MESSAGE_COUNT = 10;
+    private final static int MESSAGE_COUNT = 1;
 
     @Autowired
     private JmsTemplate jmsTemplate;

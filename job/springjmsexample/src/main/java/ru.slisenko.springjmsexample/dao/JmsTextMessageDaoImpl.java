@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
@@ -15,28 +16,48 @@ import java.sql.PreparedStatement;
 
 @Component
 public class JmsTextMessageDaoImpl implements JmsTextMessageDao {
-    private final static Logger LOGGER = LoggerFactory.getLogger(JmsTextMessageBodyDaoImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(JmsTextMessageDaoImpl.class);
+    private String innerMessageId;
+    private String body;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public Long insert(final TextMessage message) throws JMSException {
+    @Transactional
+    public void insert(TextMessage message) throws JMSException {
+        innerMessageId = message.getStringProperty("innerMessageId");
+        body = message.getText();
+        Long tableMessageId = insertHeaders();
+        insertBody(tableMessageId);
+    }
+
+    private Long insertHeaders() throws JMSException {
         PreparedStatementCreator creator = connection -> {
-            PreparedStatement statement = connection.prepareStatement(SQL_INSERT, new String[]{"id"});
-            String innerMessageId = null;
-            try {
-                innerMessageId = message.getStringProperty("innerMessageId");
-            } catch (JMSException e) {
-                throw new RuntimeException(e.getMessage());
-            }
+            PreparedStatement statement = connection.prepareStatement(SQL_INSERT_HEADERS, new String[]{"id"});
             statement.setString(1, innerMessageId);
             return statement;
         };
+        LOGGER.info("Message is saved in DB | innerMessageId: {} | text: {}", innerMessageId, body);
+        return getKey(creator);
+    }
+
+    private Long getKey(PreparedStatementCreator creator) {
         KeyHolder holder = new GeneratedKeyHolder();
         jdbcTemplate.update(creator, holder);
-        LOGGER.info("Message is saved in DB | innerMessageId: {} | text: {}",
-                message.getStringProperty("innerMessageId"), message.getText());
         return holder.getKey().longValue();
+    }
+
+    private void insertBody(Long tableMessageId) {
+        PreparedStatementCreator creator = connection -> {
+            PreparedStatement statement = connection.prepareStatement(SQL_INSERT_BODY, new String[]{"id"});
+            statement.setLong(1, tableMessageId);
+            statement.setString(2, body);
+            if (10 / 2 == 5) throw new RuntimeException("Exception in second persist");
+            return statement;
+        };
+        jdbcTemplate.update(creator);
+        LOGGER.info("MessageBody is saved in DB | innerMessageId: {} | text: {}",
+                innerMessageId, body);
     }
 }
