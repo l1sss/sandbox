@@ -53,7 +53,7 @@ public class JmsTextMessageDaoImpl implements JmsTextMessageDao {
             PreparedStatement statement = connection.prepareStatement(SQL_INSERT_BODY, new String[]{"id"});
             statement.setLong(1, tableMessageId);
             statement.setString(2, body);
-            if (10 / 2 == 5) throw new RuntimeException("Exception in second persist");
+//            if (true) throw new RuntimeException("Exception in second persist");
             return statement;
         };
         jdbcTemplate.update(creator);
