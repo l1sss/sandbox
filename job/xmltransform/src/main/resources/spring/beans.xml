@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+
+    <import resource="resources.xml"/>
+
+    <bean id="articlesDAO" class="ru.slisenko.xml.transform.dao.ArticlesDAOImpl">
+        <constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="xmlWriter" class="ru.slisenko.xml.transform.xml.XmlWriter"/>
+</beans>
