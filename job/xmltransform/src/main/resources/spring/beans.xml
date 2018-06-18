@@ -6,9 +6,15 @@
 
     <import resource="resources.xml"/>
 
+    <!-- Articles DAO -->
     <bean id="articlesDAO" class="ru.slisenko.xml.transform.dao.ArticlesDAOImpl">
         <constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
     </bean>
 
+    <!-- XML Writer -->
     <bean id="xmlWriter" class="ru.slisenko.xml.transform.xml.XmlWriter"/>
+
+    <!-- XML Transformer -->
+    <bean id="xmlTransformer" class="ru.slisenko.xml.transform.xml.XmlTransformer"/>
+
 </beans>
