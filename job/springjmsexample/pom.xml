@@ -12,7 +12,7 @@
         <spring-framework.version>4.1.0.RELEASE</spring-framework.version>
         <log4j.version>1.2.14</log4j.version>
         <slf4j.version>1.6.1</slf4j.version>
-        <activemq.version>5.4.2</activemq.version>
+        <activemq.version>5.6.0</activemq.version>
     </properties>
 
     <dependencies>
